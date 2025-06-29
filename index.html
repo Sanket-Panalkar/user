@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload and Display</title>
+    <style>
+        
+        *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* #uploadSection, #displaySection {
+            border: 1px solid #ac4949;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        } */
+        #displayArea {
+            margin-top: 20px;
+           
+        }
+        img, video {
+            max-width: 100%;
+       
+        }
+        h2{
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: var();"></h1>
+    
+    <div id="uploadSection">
+        <h2>Upload Your Image or Video</h2>
+        <input type="file" id="fileInput" accept="image/*,video/*">
+        <button onclick="uploadFile()">Upload File</button>
+    </div>
+    
+    <div id="displaySection" style="display: none;">
+        <!-- <h2>Your Uploaded File</h2> -->
+        <div id="displayArea"></div>
+        <!-- <button onclick="goBack()">Upload Another File</button> -->
+    </div>
+    
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+            
+            const displayArea = document.getElementById('displayArea');
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Hide upload section, show display section
+                document.getElementById('uploadSection').style.display = 'none';
+                document.getElementById('displaySection').style.display = 'block';
+                
+                // Display the file
+                if (file.type.startsWith('image/')) {
+                    displayArea.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image">`;
+                } else if (file.type.startsWith('video/')) {
+                    displayArea.innerHTML = `
+                        <video controls>
+                            <source src="${e.target.result}" type="${file.type}">
+                            Your browser does not support the video tag.
+                        </video>
+                    `;
+                } else {
+                    displayArea.innerHTML = `<p>File type not supported for display.</p>`;
+                }
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        function goBack() {
+            // Clear the file input
+            document.getElementById('fileInput').value = '';
+            
+            // Show upload section, hide display section
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('displaySection').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
